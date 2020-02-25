@@ -1,7 +1,10 @@
 <html>
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
 <script src="screenshot.js"></script>
 <body>
-  <button id="start">Start</button>
-  <button id="end">End</button>
-  </body>
+  <div class="container p-5" style="min-height: 200px; width: 120px;">
+    <button class="bg-gray-300 min-w-full text-center hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 mb-8 rounded" id="start">Start</button>
+    <button class="bg-red-300  min-w-full  text-center hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 mb-8 rounded" id="end">End</button>
+  </div>
+</body>
 </html>

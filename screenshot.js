@@ -1,9 +1,13 @@
 var refreshIntervalId;
+var videoTitle;
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("start").addEventListener("click", start);
     document.getElementById("end").addEventListener("click", end);
 });
 function start() {
+  chrome.tabs.query({active: true, currentWindow: true}, (tabs)  => {
+    videoTitle = tabs[0].title.replace(/\W/g, '').slice(0, 25);
+  });
   refreshIntervalId = setInterval(triggerFrameCapture, 4000);
 }
 
@@ -12,6 +16,8 @@ function end() {
 }
 
 function triggerFrameCapture() {
+
+
   chrome.tabs.captureVisibleTab(null, {
     format : "png",
     quality : 100
@@ -36,7 +42,7 @@ function saveScreenShot(url) {
 
         // save the image
         var link = document.createElement('a');
-        link.download = "download.png";
+        link.download = videoTitle;
         link.href = createCanvas.toDataURL('image/png');
         link.click();
         // screenshot.data = '';
