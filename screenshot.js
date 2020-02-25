@@ -1,11 +1,28 @@
-// Copyright (c) 2011 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-function setScreenshotUrl(url) {
-  document.getElementById('target').src = url;
+var refreshIntervalId;
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById("start").addEventListener("click", start);
+    document.getElementById("end").addEventListener("click", end);
+});
+function start() {
+  refreshIntervalId = setInterval(triggerFrameCapture, 4000);
 }
 
+function end() {
+  clearInterval(refreshIntervalId);
+}
+
+function triggerFrameCapture() {
+  chrome.tabs.captureVisibleTab(null, {
+    format : "png",
+    quality : 100
+}, function(screenshotUrl) {
+    var views = chrome.extension.getViews();
+    for (var i = 0; i < views.length; i++) {
+      var view = views[i];
+      view.saveScreenShot(screenshotUrl)
+    }
+  });
+}
 
 function saveScreenShot(url) {
   var image = new Image();
@@ -20,17 +37,9 @@ function saveScreenShot(url) {
         // save the image
         var link = document.createElement('a');
         link.download = "download.png";
-        link.href = createCanvas.toDataURL();
+        link.href = createCanvas.toDataURL('image/png');
         link.click();
-        screenshot.data = '';
+        // screenshot.data = '';
     };
     image.src = url;
 }
-
-// chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
-//   if (msg.ready === "ready") {
-//       if (confirm('Do you want to have a capture of this screen?')) {
-//           sendResponse({download : "download"});
-//       }
-//   }
-// });
